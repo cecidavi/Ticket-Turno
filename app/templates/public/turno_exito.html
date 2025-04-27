@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Turno Registrado{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+    <h2>¡Turno Registrado Exitosamente! 🎉</h2>
+
+    <p class="mt-4">Tu número de turno es:</p>
+    <h1 class="display-4">{{ turno }}</h1>
+
+    <p class="mt-4">Haz clic en el botón para descargar tu comprobante:</p>
+
+    <a href="{{ url_for('turno.descargar_ticket', curp=curp, turno=turno) }}" class="btn btn-success mt-3">
+        📄 Descargar Comprobante PDF
+    </a>
+
+    <div class="mt-5">
+        <a href="{{ url_for('turno.solicitar_turno') }}" class="btn btn-secondary">
+            🏠 Volver al inicio
+        </a>
+    </div>
+</div>
+{% endblock %}

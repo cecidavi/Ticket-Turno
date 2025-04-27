@@ -95,7 +95,7 @@ def registrar_turno():
         print(f"✅ PDF generado en: {pdf_path}")
 
         flash(f"Turno registrado exitosamente. Tu número de turno es: {nuevo_turno_numero}", "success")
-        return redirect(url_for('turno.descargar_ticket', curp=curp, turno=nuevo_turno_numero))
+        return redirect(url_for('turno.turno_exito', curp=curp, turno=nuevo_turno_numero))
 
     except Exception as e:
         db.session.rollback()
@@ -107,9 +107,23 @@ def registrar_turno():
 def descargar_ticket(curp, turno):
     try:
         filename = f"{curp}_{turno}.pdf"
-        directory = os.path.join('app', 'static', 'pdf')
-        print(f"Descargando {filename} desde {directory}")
+        directory = os.path.join(os.getcwd(), 'app', 'static', 'pdf') 
+        filepath = os.path.join(directory, filename)
+
+        print(f"Buscando archivo en: {filepath}")
+
+        if not os.path.exists(filepath):
+            flash("No se encontró el comprobante. Intenta más tarde.", "danger")
+            return redirect(url_for('turno.solicitar_turno'))
+
         return send_from_directory(directory, filename, as_attachment=True)
+
     except Exception as e:
+        print(f"❌ ERROR AL DESCARGAR: {e}")
         flash(f"Error al descargar el comprobante: {str(e)}", "danger")
         return redirect(url_for('turno.solicitar_turno'))
+
+
+@turno_bp.route('/turno-exito/<curp>/<int:turno>')
+def turno_exito(curp, turno):
+    return render_template('public/turno_exito.html', curp=curp, turno=turno)
