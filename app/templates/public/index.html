@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Formulario de Turno{% endblock %}
+
+{% block turno_num %}
+4
+{% endblock %}
+
+{% block content %}
+
+<form method="POST" action="{{ url_for('turno.registrar_turno') }}">
+    <div id="error-container" style="color: red; margin-bottom: 10px;"></div>
+
+    <label>Nombre completo de quien realizará el trámite:
+        <input type="text" name="nombre_completo" required>
+    </label>
+
+    <label>CURP:
+        <input type="text" name="curp" required>
+    </label>
+
+    <div class="row">
+        <label>Nombre:
+            <input type="text" name="nombre" required>
+        </label>
+        <label>Paterno:
+            <input type="text" name="paterno" required>
+        </label>
+        <label>Materno:
+            <input type="text" name="materno" required>
+        </label>
+    </div>
+
+    <div class="row">
+        <label>Teléfono:
+            <input type="text" name="telefono">
+        </label>
+        <label>Celular:
+            <input type="text" name="celular">
+        </label>
+        <label>Correo:
+            <input type="email" name="correo">
+        </label>
+    </div>
+
+    <label>¿Nivel al que desea ingresar o que ya cursa el alumno?
+        <select name="nivel" required>
+            <option value="">Seleccione un nivel educativo</option>
+            {% for nivel in niveles %}
+                <option value="{{ nivel.cve_nivel }}">{{ nivel.nivel }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>Municipio donde desea estudie el alumno:
+        <select name="municipio" required>
+            <option value="">Seleccione un municipio</option>
+            {% for municipio in municipios %}
+                <option value="{{ municipio.cve_mun }}">{{ municipio.nombre_mun }}</option>
+            {% endfor %}
+        </select>
+    </label>
+
+    <label>Seleccione el asunto que va a tratar:
+        <select name="asunto" required>
+            <option value="1">Inscripción</option>
+            <option value="2">Cambio de escuela</option>
+        </select>
+    </label>
+
+    <button type="submit" class="btn btn-dark w-100 mt-3">Generar Turno</button>
+</form>
+
+{% endblock %}
