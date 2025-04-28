@@ -25,7 +25,7 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">📋 Administrar Catálogos</h5>
-                    <p class="card-text">Gestiona municipios, niveles educativos y tipos de asuntos disponibles.</p>
+                    <p class="card-text">Gestiona municipios, niveles educativos y asuntos.</p>
                     <a href="{{ url_for('catalogos.catalogos') }}" class="btn btn-primary mt-2">Ir a Catálogos</a>
                 </div>
             </div>
@@ -35,8 +35,8 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">📊 Ver Dashboard</h5>
-                    <p class="card-text">Visualiza estadísticas de solicitudes pendientes y resueltas.</p>
-                    <a href="#" class="btn btn-success mt-2 disabled">Próximamente</a> <!-- Activaremos después -->
+                    <p class="card-text">Visualiza las estadísticas de solicitudes.</p>
+                    <a href="{{ url_for('dashboard.dashboard') }}" class="btn btn-success mt-2">Ver Dashboard</a>
                 </div>
             </div>
         </div>
@@ -45,7 +45,7 @@
             <div class="card h-100 shadow-sm">
                 <div class="card-body d-flex flex-column justify-content-between">
                     <h5 class="card-title">🚪 Cerrar Sesión</h5>
-                    <p class="card-text">Cerrar tu sesión de administrador de forma segura.</p>
+                    <p class="card-text">Cierra tu sesión de administrador de forma segura.</p>
                     <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mt-2">Salir</a>
                 </div>
             </div>

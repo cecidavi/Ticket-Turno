@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard de Solicitudes{% endblock %}
+
+{% block content %}
+
+<div class="container text-center">
+
+    <h2 class="mb-4">📊 Dashboard de Solicitudes</h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <canvas id="estatusChart"></canvas>
+        </div>
+    </div>
+
+</div>
+
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<!-- Cargar tu JavaScript separado -->
+<script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+
+<script>
+    // Llamar a la función para crear la gráfica (definida en dashboard.js)
+    crearGraficaEstatus({{ pendientes }}, {{ resueltos }});
+</script>
+
+{% endblock %}

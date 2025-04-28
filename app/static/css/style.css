@@ -116,3 +116,46 @@ ul {
         align-items: center;
     }
 }
+
+
+/*=============================================
+
+Admin
+=============================================*/
+
+.alert {
+    margin-top: 20px;
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Formularios dentro de las tablas */
+.table input[type="text"] {
+    height: 30px;
+    font-size: 14px;
+    padding: 5px 10px;
+}
+
+.table .btn-sm {
+    font-size: 13px;
+    padding: 4px 10px;
+}
+
+/* Margen inferior entre las tarjetas del panel */
+.card {
+    margin-bottom: 20px;
+}
+
+/* Centrar los títulos de las tarjetas */
+.card-title {
+    text-align: center;
+}
+
+/* Separación general para formularios */
+.form-control {
+    margin-bottom: 10px;
+}
