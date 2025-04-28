@@ -5,10 +5,9 @@
 {% block content %}
 
 <div class="container text-center">
-
     <h2 class="mb-4">📊 Dashboard de Solicitudes</h2>
 
-    <!-- Selector de municipio -->
+    <!-- Filtro de Municipio -->
     <form method="GET" action="{{ url_for('dashboard.dashboard') }}" class="row justify-content-center mb-4">
         <div class="col-md-6">
             <select name="municipio" class="form-select" onchange="this.form.submit()">
@@ -22,7 +21,7 @@
         </div>
     </form>
 
-    <!-- Tarjetas resumen -->
+    <!-- Tarjetas Resumen -->
     <div class="row justify-content-center mb-4">
         <div class="col-12 col-md-3 mb-3">
             <div class="card border-dark h-100">
@@ -50,26 +49,61 @@
         </div>
     </div>
 
-    <!-- Gráfica de pastel -->
-    <div class="row justify-content-center">
+    <!-- Gráfica -->
+    <div class="row justify-content-center mb-5">
         <div class="col-md-6">
             <canvas id="estatusChart"></canvas>
         </div>
     </div>
 
+    <!-- Lista de Pendientes para cambiar a Resuelto -->
+    <div class="card">
+        <div class="card-header">
+            Solicitudes Pendientes
+        </div>
+        <div class="card-body">
+            {% if solicitudes %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>CURP</th>
+                            <th>Turno</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for solicitud in solicitudes %}
+                            <tr>
+                                <td>{{ solicitud.curp }}</td>
+                                <td>{{ solicitud.turno_municipio }}</td>
+                                <td>
+                                    <form action="{{ url_for('dashboard.cambiar_estatus', id=solicitud.id_solicitud) }}" method="POST">
+                                        <button type="submit" class="btn btn-success btn-sm">Marcar como Resuelto</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p class="text-muted">No hay solicitudes pendientes en este municipio.</p>
+            {% endif %}
+        </div>
+    </div>
+
 </div>
 
-<!-- Chart.js CDN -->
+<!-- Librería Chart.js -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-<!-- JavaScript separado -->
+<!-- Archivo dashboard.js -->
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 
+<!-- Script para cargar la gráfica -->
 <script>
-    var pendientes = Number("{{ pendientes|default(0) }}");
-    var resueltos = Number("{{ resueltos|default(0) }}");
+    var pendientes = "{{ pendientes|default(0) | safe }}";
+    var resueltos = "{{ resueltos|default(0) | safe }}";
     crearGraficaEstatus(pendientes, resueltos);
 </script>
-
 
 {% endblock %}

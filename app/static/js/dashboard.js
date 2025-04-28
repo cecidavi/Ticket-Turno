@@ -1,6 +1,8 @@
+// static/js/dashboard.js
+
 function crearGraficaEstatus(pendientes, resueltos) {
     const ctx = document.getElementById('estatusChart').getContext('2d');
-    
+
     if (window.estatusChartInstance) {
         window.estatusChartInstance.destroy();
     }
