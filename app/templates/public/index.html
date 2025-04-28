@@ -4,10 +4,16 @@
 
 {% block content %}
 
-<h2 class="text-center mb-4">Solicitud de Turno</h2>
-
 <form method="POST" action="{{ url_for('turno.registrar_turno') }}">
     <div id="error-container" style="color: red; margin-bottom: 10px;"></div>
+
+    <label>Nombre completo de quien realizará el trámite:
+        <input type="text" name="nombre_completo" required>
+    </label>
+
+    <label>CURP:
+        <input type="text" name="curp" required>
+    </label>
 
     <div class="row">
         <label>Nombre:
@@ -20,10 +26,6 @@
             <input type="text" name="materno" required>
         </label>
     </div>
-
-    <label>CURP:
-        <input type="text" name="curp" required>
-    </label>
 
     <div class="row">
         <label>Teléfono:
@@ -57,12 +59,20 @@
 
     <label>Seleccione el asunto que va a tratar:
         <select name="asunto" required>
-            <option value="1">Inscripción</option>
-            <option value="2">Cambio de escuela</option>
+            <option value="">Seleccione un asunto</option>
+            {% for asunto in asuntos %}
+                <option value="{{ asunto.id_asunto }}">{{ asunto.asunto }}</option>
+            {% endfor %}
         </select>
     </label>
 
-    <button type="submit" class="btn btn-dark w-100 mt-3">Generar Turno</button>
+    <button type="submit" class="btn btn-dark w-100 mt-3">🎟️ Generar Turno</button>
 </form>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('turno.buscar_turno') }}" class="btn btn-warning">
+        ✏️ Modificar Datos Registrados
+    </a>
+</div>
 
 {% endblock %}

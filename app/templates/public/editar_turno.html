@@ -8,13 +8,13 @@
 <form method="POST" action="{{ url_for('turno.editar_turno', id_solicitud=solicitud.id_solicitud) }}">
     <div class="row">
         <label>Nombre:
-            <input type="text" name="nombre" value="{{ alumno.nombre }}" required>
+            <input type="text" value="{{ alumno.nombre }}" readonly>
         </label>
         <label>Paterno:
-            <input type="text" name="paterno" value="{{ alumno.paterno }}" required>
+            <input type="text" value="{{ alumno.paterno }}" readonly>
         </label>
         <label>Materno:
-            <input type="text" name="materno" value="{{ alumno.materno }}" required>
+            <input type="text" value="{{ alumno.materno }}" readonly>
         </label>
     </div>
 

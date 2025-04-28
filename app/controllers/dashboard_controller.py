@@ -1,5 +1,6 @@
-from flask import Blueprint, render_template, session, redirect, url_for, flash
+from flask import Blueprint, render_template, session, redirect, url_for, flash, request
 from app.models.solicitud_turno import SolicitudTurno
+from app.models.municipio import Municipio
 
 dashboard_bp = Blueprint('dashboard', __name__)
 
@@ -14,11 +15,27 @@ def admin_required(func):
         return func(*args, **kwargs)
     return decorated_view
 
-# --- Ruta para ver el Dashboard ---
-@dashboard_bp.route('/admin/dashboard')
+# --- Dashboard con filtro por municipio ---
+@dashboard_bp.route('/admin/dashboard', methods=['GET'])
 @admin_required
 def dashboard():
-    pendientes = SolicitudTurno.query.filter_by(id_estatus=1).count()
-    resueltos = SolicitudTurno.query.filter_by(id_estatus=2).count()
+    municipios = Municipio.query.all()
 
-    return render_template('admin/dashboard.html', pendientes=pendientes, resueltos=resueltos)
+    municipio_id = request.args.get('municipio', type=int)
+    if municipio_id:
+        pendientes = SolicitudTurno.query.filter_by(id_estatus=1, cve_mun=municipio_id).count()
+        resueltos = SolicitudTurno.query.filter_by(id_estatus=2, cve_mun=municipio_id).count()
+    else:
+        pendientes = SolicitudTurno.query.filter_by(id_estatus=1).count()
+        resueltos = SolicitudTurno.query.filter_by(id_estatus=2).count()
+
+    total = pendientes + resueltos
+
+    return render_template(
+        'admin/dashboard.html',
+        municipios=municipios,
+        pendientes=pendientes,
+        resueltos=resueltos,
+        total=total,
+        municipio_id=municipio_id
+    )
