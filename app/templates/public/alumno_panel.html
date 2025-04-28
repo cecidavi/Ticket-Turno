@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Alumno{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Panel del Alumno</h2>
+
+<p><strong>CURP:</strong> {{ curp }}</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Turno</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for solicitud in solicitudes %}
+        <tr>
+            <td>{{ solicitud.turno_municipio }}</td>
+            <td>
+                <a href="{{ url_for('turno.editar_turno', id_solicitud=solicitud.id_solicitud) }}" class="btn btn-warning btn-sm">✏️ Editar</a>
+                <a href="{{ url_for('turno.descargar_ticket', curp=solicitud.curp, turno=solicitud.turno_municipio) }}" class="btn btn-success btn-sm">📄 Descargar PDF</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('turno.solicitar_turno') }}" class="btn btn-secondary">🏠 Volver al Inicio</a>
+</div>
+{% endblock %}

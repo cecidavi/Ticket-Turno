@@ -1,32 +1,39 @@
-from flask import Blueprint, render_template, redirect, url_for, flash, request, session
-from app.forms.login_form import LoginForm
+from flask import Blueprint, render_template, redirect, url_for, request, flash, session
 from app.models.usuario import Usuario
-from app import db
+from app.utils.db import db
 
 auth_bp = Blueprint('auth', __name__)
 
-@auth_bp.route('/admin/login', methods=['GET', 'POST'])
+# --- Login ---
+@auth_bp.route('/login', methods=['GET', 'POST'])
 def login():
-    form = LoginForm()
+    if request.method == 'POST':
+        usuario = request.form['usuario']
+        password = request.form['password']
 
-    if form.validate_on_submit():
-        usuario = form.usuario.data
-        password = form.password.data
+        admin = Usuario.query.filter_by(usuario=usuario, password_hash=password).first()
 
-        # Buscar el usuario en la base de datos
-        user = Usuario.query.filter_by(usuario=usuario).first()
-
-        if user and user.password_hash == password:  # Aún no hasheado
-            session['usuario'] = user.usuario
-            flash('Inicio de sesión exitoso', 'success')
-            return redirect(url_for('turno.dashboard'))  # Redirigir a dashboard después
+        if admin:
+            session['admin_id'] = admin.id
+            flash('Bienvenido administrador.', 'success')
+            return redirect(url_for('auth.admin_panel'))  # 👈 Redirige al panel admin
         else:
-            flash('Usuario o contraseña incorrectos', 'danger')
+            flash('Usuario o contraseña incorrectos.', 'danger')
+            return redirect(url_for('auth.login'))
 
-    return render_template('admin/login.html', form=form)
+    return render_template('admin/login.html')
 
+# --- Logout ---
 @auth_bp.route('/logout')
 def logout():
-    session.pop('usuario', None)
-    flash('Sesión cerrada correctamente.', 'success')
+    session.clear()
+    flash('Sesión cerrada exitosamente.', 'success')
     return redirect(url_for('auth.login'))
+
+# --- Panel administrador ---
+@auth_bp.route('/admin-panel')
+def admin_panel():
+    if 'admin_id' not in session:
+        flash('Acceso no autorizado.', 'danger')
+        return redirect(url_for('auth.login'))
+    return render_template('admin/admin_panel.html')

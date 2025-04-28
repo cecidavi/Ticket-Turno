@@ -26,7 +26,6 @@ def registrar_turno():
         print("🚀 FORMULARIO RECIBIDO:")
         print(request.form)
 
-        nombre_completo = request.form['nombre_completo']
         curp = request.form['curp']
         nombre = request.form['nombre']
         paterno = request.form['paterno']
@@ -59,7 +58,6 @@ def registrar_turno():
         nuevo_turno_numero = total_turnos + 1
         print(f"Nuevo turno: {nuevo_turno_numero}")
 
-        print("📝 Registrando solicitud de turno...")
         nueva_solicitud = SolicitudTurno(
             curp=curp,
             cve_mun=int(municipio),
@@ -74,7 +72,6 @@ def registrar_turno():
         db.session.commit()
         print("✅ Turno registrado exitosamente en la base de datos")
 
-        # Obtener nombres reales para el PDF
         municipio_obj = Municipio.query.get(int(municipio))
         nivel_obj = Nivel.query.get(int(nivel))
         asunto_obj = Asunto.query.get(int(asunto))
@@ -83,10 +80,9 @@ def registrar_turno():
         nivel_nombre = nivel_obj.nivel if nivel_obj else "N/A"
         asunto_nombre = asunto_obj.asunto if asunto_obj else "N/A"
 
-        # Generar el PDF del turno
         pdf_path = generate_ticket_pdf(
             curp=curp,
-            nombre_completo=nombre_completo,
+            nombre_completo=f"{nombre} {paterno} {materno}",
             turno_municipio=nuevo_turno_numero,
             municipio=municipio_nombre,
             nivel=nivel_nombre,
@@ -107,7 +103,7 @@ def registrar_turno():
 def descargar_ticket(curp, turno):
     try:
         filename = f"{curp}_{turno}.pdf"
-        directory = os.path.join(os.getcwd(), 'app', 'static', 'pdf') 
+        directory = os.path.join(os.getcwd(), 'app', 'static', 'pdf')
         filepath = os.path.join(directory, filename)
 
         print(f"Buscando archivo en: {filepath}")
@@ -123,7 +119,39 @@ def descargar_ticket(curp, turno):
         flash(f"Error al descargar el comprobante: {str(e)}", "danger")
         return redirect(url_for('turno.solicitar_turno'))
 
-
 @turno_bp.route('/turno-exito/<curp>/<int:turno>')
 def turno_exito(curp, turno):
     return render_template('public/turno_exito.html', curp=curp, turno=turno)
+
+@turno_bp.route('/modificar-turno', methods=['GET', 'POST'])
+def modificar_turno():
+    if request.method == 'POST':
+        curp = request.form['curp']
+        solicitudes = SolicitudTurno.query.filter_by(curp=curp).all()
+
+        if solicitudes:
+            return render_template('public/alumno_panel.html', solicitudes=solicitudes, curp=curp)
+        else:
+            flash("No se encontró un registro con ese CURP.", "danger")
+            return redirect(url_for('turno.modificar_turno'))
+
+    return render_template('public/buscar_turno.html')
+
+@turno_bp.route('/editar-turno/<int:id_solicitud>', methods=['GET', 'POST'])
+def editar_turno(id_solicitud):
+    solicitud = SolicitudTurno.query.get(id_solicitud)
+    alumno = Alumno.query.filter_by(curp=solicitud.curp).first()
+
+    if request.method == 'POST':
+        alumno.nombre = request.form['nombre']
+        alumno.paterno = request.form['paterno']
+        alumno.materno = request.form['materno']
+        solicitud.telefono = request.form['telefono']
+        solicitud.celular = request.form['celular']
+        solicitud.correo = request.form['correo']
+        db.session.commit()
+
+        flash("Datos actualizados correctamente.", "success")
+        return redirect(url_for('turno.solicitar_turno'))
+
+    return render_template('public/editar_turno.html', solicitud=solicitud, alumno=alumno)

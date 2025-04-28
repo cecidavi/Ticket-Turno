@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}Catálogos de Municipios, Niveles y Asuntos{% endblock %}
+
+{% block content %}
+
+<div class="container">
+
+    <h2 class="mb-4">Catálogos</h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <!-- MUNICIPIOS -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Municipios
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('catalogos.agregar_municipio') }}" method="POST" class="d-flex mb-3">
+                <input type="text" name="nombre_mun" placeholder="Nuevo municipio" class="form-control me-2" required>
+                <button class="btn btn-primary">Agregar</button>
+            </form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for municipio in municipios %}
+                    <tr>
+                        <td>{{ municipio.nombre_mun }}</td>
+                        <td>
+                            <form action="{{ url_for('catalogos.editar_municipio', id=municipio.cve_mun) }}" method="POST" class="d-inline">
+                                <input type="text" name="nombre_mun" class="form-control d-inline w-50" value="{{ municipio.nombre_mun }}" required>
+                                <button class="btn btn-warning btn-sm">Editar</button>
+                            </form>
+                            <form action="{{ url_for('catalogos.eliminar_municipio', id=municipio.cve_mun) }}" method="POST" class="d-inline">
+                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- NIVELES -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Niveles
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('catalogos.agregar_nivel') }}" method="POST" class="d-flex mb-3">
+                <input type="text" name="nivel" placeholder="Nuevo nivel" class="form-control me-2" required>
+                <button class="btn btn-primary">Agregar</button>
+            </form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for nivel in niveles %}
+                    <tr>
+                        <td>{{ nivel.nivel }}</td>
+                        <td>
+                            <form action="{{ url_for('catalogos.editar_nivel', id=nivel.cve_nivel) }}" method="POST" class="d-inline">
+                                <input type="text" name="nivel" class="form-control d-inline w-50" value="{{ nivel.nivel }}" required>
+                                <button class="btn btn-warning btn-sm">Editar</button>
+                            </form>
+                            <form action="{{ url_for('catalogos.eliminar_nivel', id=nivel.cve_nivel) }}" method="POST" class="d-inline">
+                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- ASUNTOS -->
+    <div class="card mb-4">
+        <div class="card-header">
+            Asuntos
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('catalogos.agregar_asunto') }}" method="POST" class="d-flex mb-3">
+                <input type="text" name="asunto" placeholder="Nuevo asunto" class="form-control me-2" required>
+                <button class="btn btn-primary">Agregar</button>
+            </form>
+
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for asunto in asuntos %}
+                    <tr>
+                        <td>{{ asunto.asunto }}</td>
+                        <td>
+                            <form action="{{ url_for('catalogos.editar_asunto', id=asunto.id_asunto) }}" method="POST" class="d-inline">
+                                <input type="text" name="asunto" class="form-control d-inline w-50" value="{{ asunto.asunto }}" required>
+                                <button class="btn btn-warning btn-sm">Editar</button>
+                            </form>
+                            <form action="{{ url_for('catalogos.eliminar_asunto', id=asunto.id_asunto) }}" method="POST" class="d-inline">
+                                <button class="btn btn-danger btn-sm">Eliminar</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

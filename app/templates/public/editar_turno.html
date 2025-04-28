@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Editar Datos{% endblock %}
+
+{% block content %}
+<h2 class="text-center mb-4">Editar Datos del Alumno</h2>
+
+<form method="POST" action="{{ url_for('turno.editar_turno', id_solicitud=solicitud.id_solicitud) }}">
+    <div class="row">
+        <label>Nombre:
+            <input type="text" name="nombre" value="{{ alumno.nombre }}" required>
+        </label>
+        <label>Paterno:
+            <input type="text" name="paterno" value="{{ alumno.paterno }}" required>
+        </label>
+        <label>Materno:
+            <input type="text" name="materno" value="{{ alumno.materno }}" required>
+        </label>
+    </div>
+
+    <div class="row">
+        <label>Teléfono:
+            <input type="text" name="telefono" value="{{ solicitud.telefono }}">
+        </label>
+        <label>Celular:
+            <input type="text" name="celular" value="{{ solicitud.celular }}">
+        </label>
+        <label>Correo:
+            <input type="email" name="correo" value="{{ solicitud.correo }}">
+        </label>
+    </div>
+
+    <button type="submit" class="btn btn-success w-100 mt-3">Guardar Cambios</button>
+</form>
+
+<div class="text-center mt-4">
+    <a href="{{ url_for('turno.solicitar_turno') }}" class="btn btn-secondary">🏠 Volver al Inicio</a>
+</div>
+{% endblock %}

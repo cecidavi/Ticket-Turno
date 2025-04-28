@@ -2,19 +2,12 @@
 
 {% block title %}Formulario de Turno{% endblock %}
 
-
 {% block content %}
+
+<h2 class="text-center mb-4">Solicitud de Turno</h2>
 
 <form method="POST" action="{{ url_for('turno.registrar_turno') }}">
     <div id="error-container" style="color: red; margin-bottom: 10px;"></div>
-
-    <label>Nombre completo de quien realizará el trámite:
-        <input type="text" name="nombre_completo" required>
-    </label>
-
-    <label>CURP:
-        <input type="text" name="curp" required>
-    </label>
 
     <div class="row">
         <label>Nombre:
@@ -27,6 +20,10 @@
             <input type="text" name="materno" required>
         </label>
     </div>
+
+    <label>CURP:
+        <input type="text" name="curp" required>
+    </label>
 
     <div class="row">
         <label>Teléfono:

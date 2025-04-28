@@ -1,8 +1,9 @@
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
+# app/__init__.py
 
-db = SQLAlchemy()
+from flask import Flask
+from flask_migrate import Migrate
+from app.utils.db import db  # <-- Ahora importamos db de utils
+
 migrate = Migrate()
 
 def create_app():
@@ -12,7 +13,7 @@ def create_app():
     db.init_app(app)
     migrate.init_app(app, db)
 
-    # Registrar Blueprints después
+    # Registrar Blueprints
     from app.controllers.auth_controller import auth_bp
     from app.controllers.turno_controller import turno_bp
     from app.controllers.catalogos_controller import catalogos_bp

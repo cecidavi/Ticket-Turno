@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Administración{% endblock %}
+
+{% block content %}
+
+<div class="container text-center">
+
+    <h2 class="mb-4">🎛️ Panel de Control - Administrador</h2>
+
+    <!-- Flash messages -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>
+        {% endfor %}
+      {% endif %}
+    {% endwith %}
+
+    <div class="row g-4 justify-content-center mt-4">
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">📋 Administrar Catálogos</h5>
+                    <p class="card-text">Gestiona municipios, niveles educativos y tipos de asuntos disponibles.</p>
+                    <a href="{{ url_for('catalogos.catalogos') }}" class="btn btn-primary mt-2">Ir a Catálogos</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">📊 Ver Dashboard</h5>
+                    <p class="card-text">Visualiza estadísticas de solicitudes pendientes y resueltas.</p>
+                    <a href="#" class="btn btn-success mt-2 disabled">Próximamente</a> <!-- Activaremos después -->
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-md-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <h5 class="card-title">🚪 Cerrar Sesión</h5>
+                    <p class="card-text">Cerrar tu sesión de administrador de forma segura.</p>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-danger mt-2">Salir</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
