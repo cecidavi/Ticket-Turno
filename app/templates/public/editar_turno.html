@@ -7,14 +7,18 @@
 
 <form method="POST" action="{{ url_for('turno.editar_turno', id_solicitud=solicitud.id_solicitud) }}">
     <div class="row">
+        <!-- Mostrar nombre, paterno, materno solo visibles (sin editar) -->
         <label>Nombre:
             <input type="text" value="{{ alumno.nombre }}" readonly>
+            <input type="hidden" name="nombre" value="{{ alumno.nombre }}">
         </label>
         <label>Paterno:
             <input type="text" value="{{ alumno.paterno }}" readonly>
+            <input type="hidden" name="paterno" value="{{ alumno.paterno }}">
         </label>
         <label>Materno:
             <input type="text" value="{{ alumno.materno }}" readonly>
+            <input type="hidden" name="materno" value="{{ alumno.materno }}">
         </label>
     </div>
 
